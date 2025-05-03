@@ -1,0 +1,7 @@
+django
+djangorestframework
+psycopg2-binary
+dj-database-url
+python-decouple
+requests
+django-cors-headers
