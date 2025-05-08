@@ -1,7 +1,5 @@
 django
 djangorestframework
-psycopg2-binary
-dj-database-url
+psycopg
 python-decouple
-requests
 django-cors-headers

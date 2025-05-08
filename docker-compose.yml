@@ -1,5 +1,7 @@
 services:
+
   frontend:
+    container_name: frontend
     build:
       context: ./frontend
     working_dir: /app
