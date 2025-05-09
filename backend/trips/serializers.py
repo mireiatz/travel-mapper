@@ -11,4 +11,5 @@ class TripSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Trip
-        fields = '__all__'
+        fields = ['id', 'name', 'start_date', 'end_date', 'user', 'created_at', 'journeys']
+        read_only_fields = ['user', 'created_at', 'journeys']

@@ -8,6 +8,9 @@ class Trip(models.Model):
     end_date = models.DateField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        app_label = 'trips'
+
     def __str__(self):
         return self.name
 
@@ -18,6 +21,9 @@ class Journey(models.Model):
     transport_type = models.CharField(max_length=50)
     date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        app_label = 'trips'
 
     def __str__(self):
         return f"{self.from_location} → {self.to_location} on {self.date}"
