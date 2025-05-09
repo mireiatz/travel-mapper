@@ -6,9 +6,10 @@ function Button({
     type = 'button',
     className = '',
     variant = 'primary',
-    disabled = false
+    disabled = false,
+    icon: Icon = null,
 }) {
-    const baseClasses = `font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-all duration-200`;
+    const baseClasses = `font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-all duration-200 flex items-center justify-center space-x-2`;
 
     const variantClasses = {
         primary: 'bg-blue-500 hover:bg-blue-700 text-white',
@@ -26,7 +27,8 @@ function Button({
             disabled={disabled}
             className={`${baseClasses} ${variantClasses[variant]} ${disabledClasses} ${className}`}
         >
-            {label}
+            {Icon && <Icon className="w-5 h-5" />}
+            <span>{label}</span>
         </button>
     );
 }
