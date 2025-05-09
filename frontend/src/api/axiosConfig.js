@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// Create a base API instance for consistent configuration
 const api = axios.create({
     baseURL: 'http://localhost:8000/api/',
     headers: {
@@ -7,7 +8,7 @@ const api = axios.create({
     },
 });
 
-// Interceptors for adding auth tokens, logging, or error handling
+// Global error handling for all API responses
 api.interceptors.response.use(
     (response) => response,
     (error) => {

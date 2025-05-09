@@ -1,7 +1,7 @@
 import React from 'react';
-import TripItem from "./TripItem.jsx";
+import TripItem from './TripItem.jsx';
 
-function TripList({ trips }) {
+function TripList({ trips, onEdit, onDelete }) {
     if (!trips.length) {
         return <p>No trips found.</p>;
     }
@@ -9,7 +9,12 @@ function TripList({ trips }) {
     return (
         <ul>
             {trips.map((trip) => (
-                <TripItem key={trip.id} trip={trip} />
+                <TripItem
+                    key={trip.id}
+                    trip={trip}
+                    onEdit={onEdit}
+                    onDelete={onDelete}
+                />
             ))}
         </ul>
     );

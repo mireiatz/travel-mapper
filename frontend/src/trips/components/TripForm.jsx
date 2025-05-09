@@ -1,72 +1,55 @@
-import React, { useState } from 'react';
-import { createTrip } from '../../api/trips.js';
+import { useState, useEffect } from "react";
+import Input from "../../components/Input";
 
-function TripForm({ onTripCreated }) {
-    const [name, setName] = useState('');
+function TripForm({ trip = {}, onChange }) {
+    const [tripName, setTripName] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        try {
-            const newTrip = await createTrip({
-                name,
-                start_date: startDate,
-                end_date: endDate,
-            });
-            onTripCreated(newTrip);
-            setName('');
+    // Populate the form if editing
+    useEffect(() => {
+        if (trip) {
+            setTripName(trip.name || '');
+            setStartDate(trip.start_date || '');
+            setEndDate(trip.end_date || '');
+        } else {
+            setTripName('');
             setStartDate('');
             setEndDate('');
-        } catch (error) {
-            console.error('Error creating trip:', error);
         }
-    };
+    }, [trip]);
+
+    // Pass up form state to the parent
+    useEffect(() => {
+        onChange({
+            id: trip?.id,
+            name: tripName,
+            start_date: startDate || null,
+            end_date: endDate || null,
+        });
+    }, [tripName, startDate, endDate]);
 
     return (
-        <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                    Trip Name
-                </label>
-                <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    required
-                />
-            </div>
-            <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                    Start Date
-                </label>
-                <input
-                    type="date"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                />
-            </div>
-            <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                    End Date
-                </label>
-                <input
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                />
-            </div>
-            <button
-                type="submit"
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            >
-                Create Trip
-            </button>
-        </form>
+        <div className="space-y-4">
+            <Input
+                label="Trip Name"
+                value={tripName}
+                onChange={(e) => setTripName(e.target.value)}
+                required
+            />
+            <Input
+                label="Start Date"
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+            />
+            <Input
+                label="End Date"
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+            />
+        </div>
     );
 }
 

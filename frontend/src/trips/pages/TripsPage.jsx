@@ -1,41 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import TripList from '../components/TripList';
-import TripModal from '../modals/TripModal';
+import ManageTripModal from '../modals/ManageTripModal.jsx';
 import Button from '../../components/Button';
-import { fetchTrips } from '../../api/trips';
+import ValidationAlert from '../../components/ValidationAlert';
+import Spinner from '../../components/Spinner';
+import { useTrips } from '../hooks/useTrips.js';
+import { useModal } from '../../hooks/useModal.js';
+import { PlusIcon } from '@heroicons/react/24/outline';
 
 function TripsPage() {
-    const [trips, setTrips] = useState([]);
-    const [modalOpen, setModalOpen] = useState(false);
+    const { trips, addTrip, editTrip, removeTrip, error, loading, clearError } = useTrips();
+    const { isOpen, item: editingTrip, openModal, closeModal } = useModal();
 
-    useEffect(() => {
-        const loadTrips = async () => {
-            try {
-                const data = await fetchTrips();
-                setTrips(data);
-            } catch (error) {
-                console.error('Error fetching trips:', error);
+    const handleSaveTrip = async (tripData) => {
+        try {
+            if (tripData.id) {
+                await editTrip(tripData.id, tripData);
+            } else {
+                await addTrip(tripData);
             }
-        };
-
-        loadTrips();
-    }, []);
-
-    const handleCreateTrip = (newTrip) => {
-        setTrips([newTrip, ...trips]);
+            closeModal();
+        } catch (err) {
+            console.error('Failed to save trip:', err);
+        }
     };
 
     return (
         <div className="min-h-screen bg-gray-100 p-4">
             <div className="flex justify-between items-center mb-8">
                 <h1 className="text-4xl font-bold text-blue-600">Trips</h1>
-                <Button label="+ Add" onClick={() => setModalOpen(true)} />
+                <Button label="Add" icon={PlusIcon} onClick={openModal} />
             </div>
-            <TripList trips={trips} />
-            <TripModal
-                isOpen={modalOpen}
-                onClose={() => setModalOpen(false)}
-                onCreate={handleCreateTrip}
+
+            <Spinner visible={loading} />
+            <ValidationAlert message={error} onClose={clearError} />
+
+            <TripList
+                trips={trips}
+                onEdit={openModal}
+                onDelete={removeTrip}
+            />
+
+            <ManageTripModal
+                isOpen={isOpen}
+                onClose={closeModal}
+                onSave={handleSaveTrip}
+                editingTrip={editingTrip}
             />
         </div>
     );

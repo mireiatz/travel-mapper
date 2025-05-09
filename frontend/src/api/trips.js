@@ -1,21 +1,20 @@
 import api from './axiosConfig';
+import { handleApiError } from './utils.js';
 
-export const fetchTrips = async () => {
+// Generic request handler to simplify reqyes, response nad error handling
+const requestHandler = async (method, url, data = null) => {
     try {
-        const response = await api.get('/trips/');
+        const response = data
+            ? await api[method](url, data)
+            : await api[method](url);
         return response.data;
     } catch (error) {
-        console.error('Error fetching trips:', error);
-        throw error;
+        throw handleApiError(error);
     }
 };
 
-export const createTrip = async (tripData) => {
-    try {
-        const response = await api.post('/trips/', tripData);
-        return response.data;
-    } catch (error) {
-        console.error('Error creating trip:', error);
-        throw error;
-    }
-};
+export const fetchTrips = () => requestHandler('get', '/trips/');
+export const fetchTripById = (tripId) => requestHandler('get', `/trips/${tripId}/`);
+export const createTrip = (tripData) => requestHandler('post', '/trips/', tripData);
+export const updateTrip = (tripId, tripData) => requestHandler('put', `/trips/${tripId}/`, tripData);
+export const deleteTrip = (tripId) => requestHandler('delete', `/trips/${tripId}/`);
