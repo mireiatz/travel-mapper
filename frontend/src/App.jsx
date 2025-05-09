@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import MainLayout from './layouts/MainLayout'
 import Home from './pages/Home'
-import Trips from './pages/Trips'
+import TripsPage from "./trips/pages/TripsPage.jsx";
 
 function App() {
     return (
@@ -10,7 +10,7 @@ function App() {
             <MainLayout>
                 <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="/trips" element={<Trips />} />
+                    <Route path="/trips" element={<TripsPage />} />
                 </Routes>
             </MainLayout>
         </Router>
