@@ -1,3 +1,5 @@
+import api from './axiosConfig';
+
 // Generic error handler
 export const handleApiError = (error) => {
     if (error.response) {
@@ -12,5 +14,17 @@ export const handleApiError = (error) => {
         return 'No response from server.';
     } else {
         return 'Unexpected error.';
+    }
+};
+
+// Generic request handler for API requests
+export const requestHandler = async (method, url, data = null) => {
+    try {
+        const response = data
+            ? await api[method](url, data)
+            : await api[method](url);
+        return response.data;
+    } catch (error) {
+        throw handleApiError(error);
     }
 };
