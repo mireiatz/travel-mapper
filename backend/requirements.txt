@@ -3,3 +3,4 @@ djangorestframework
 psycopg
 python-decouple
 django-cors-headers
+drf-nested-routers

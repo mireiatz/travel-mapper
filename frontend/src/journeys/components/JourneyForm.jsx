@@ -67,6 +67,7 @@ function JourneyForm({ journey = {}, onChange }) {
                     value={formData.transport_type}
                     onChange={(value) => handleChange('transport_type', value)}
                     className="w-full max-w-2xl"
+                    required
                 />
             </div>
         </div>

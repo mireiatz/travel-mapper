@@ -1,46 +1,74 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Modal from '../../components/Modal.jsx';
 import JourneyForm from '../components/JourneyForm.jsx';
 
-function ManageJourneyModal({ isOpen, onClose, onSave, editingJourney }) {
-    const [journeyData, setJourneyData] = useState({});
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+function ManageJourneyModal({ isOpen, onClose, onSave, editingJourney, loading, error }) {
+    const [journey, setJourney] = useState({
+        from_location: '',
+        to_location: '',
+        transport_type: '',
+        start_date: '',
+        end_date: ''
+    });
+    const [validationError, setValidationError] = useState('');
+
+    useEffect(() => {
+        if (editingJourney) {
+            setJourney(editingJourney);
+        } else {
+            setJourney({
+                from_location: '',
+                to_location: '',
+                transport_type: '',
+                start_date: '',
+                end_date: ''
+            });
+        }
+
+        if (isOpen) {
+            setValidationError('');
+        }
+    }, [isOpen, editingJourney]);
+
 
     const handleSave = async () => {
-        if (!journeyData.from_location || !journeyData.to_location) {
-            setError('Both "From" and "To" locations are required');
+        setValidationError('');
+
+        if (!journey.from_location || !journey.to_location) {
+            setValidationError('Both "From" and "To" locations are required');
             return;
         }
 
-        setLoading(true);
-        try {
-            await onSave(journeyData);
-            onClose();
-        } catch (err) {
-            setError('Failed to save journey.');
-        } finally {
-            setLoading(false);
+        if (!journey.transport_type) {
+            setValidationError('The transport type is required');
+            return;
         }
+
+        await onSave({
+            id: journey.id || null,
+            from_location: journey.from_location,
+            to_location: journey.to_location,
+            transport_type: journey.transport_type,
+            start_date: journey.start_date || null,
+            end_date: journey.end_date || null
+        });
+        onClose();
     };
 
     return (
         <Modal
             isOpen={isOpen}
             title={editingJourney ? 'Update Journey' : 'Create Journey'}
-            onClose={() => {
-                setError('');
-                onClose();
-            }}
-            footerButtonText={editingJourney ? 'Update' : 'Create'}
+            onClose={onClose}
             onFooterButtonClick={handleSave}
-            errorMessage={error}
+            footerButtonText={editingJourney ? "Update" : "Create"}
             loading={loading}
+            error={validationError || error}
             maxWidth="max-w-xl"
         >
             <JourneyForm
                 journey={editingJourney}
-                onChange={setJourneyData}
+                onChange={setJourney}
             />
         </Modal>
     );

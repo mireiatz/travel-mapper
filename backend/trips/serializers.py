@@ -6,10 +6,11 @@ class JourneySerializer(serializers.ModelSerializer):
     class Meta:
         model = Journey
         fields = '__all__'
+        read_only_fields = ['trip']
 
 class TripSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Trip
-        fields = ['id', 'name', 'start_date', 'end_date', 'user', 'created_at']
-        read_only_fields = ['user', 'created_at']
+        fields = '__all__'
+        read_only_fields = ['user']

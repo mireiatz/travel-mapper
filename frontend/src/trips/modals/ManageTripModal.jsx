@@ -3,14 +3,22 @@ import TripForm from "../components/TripForm.jsx";
 import { useState, useEffect } from "react";
 
 function ManageTripModal({ isOpen, onClose, onSave, editingTrip, loading, error }) {
-    const [trip, setTrip] = useState({ name: '', start_date: null, end_date: null });
+    const [trip, setTrip] = useState({
+        name: '',
+        start_date: null,
+        end_date: null
+    });
     const [validationError, setValidationError] = useState('');
 
     useEffect(() => {
         if (editingTrip) {
             setTrip(editingTrip);
         } else {
-            setTrip({ name: '', start_date: null, end_date: null });
+            setTrip({
+                name: '',
+                start_date: null,
+                end_date: null
+            });
         }
 
         if (isOpen) {

@@ -3,17 +3,16 @@ import { TRANSPORT_TYPES } from '../../data/transportTypes.js';
 
 function TransportSelector({ value, onChange }) {
     return (
-        <div className="flex flex-wrap gap-4 mb-4">
-            {Object.entries(TRANSPORT_TYPES).map(([key, { label, icon: Icon }]) => (
+        <div className="flex flex-wrap gap-2 justify-center mb-4 w-full">
+            {Object.entries(TRANSPORT_TYPES).map(([key, { icon: Icon }]) => (
                 <button
                     key={key}
-                    className={`p-4 rounded-lg shadow-lg flex flex-col items-center space-y-2 ${
+                    className={`p-2 rounded-lg shadow-md flex items-center justify-center w-12 h-12 transition-colors ${
                         value === key ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
                     }`}
                     onClick={() => onChange(key)}
                 >
-                    <Icon className="w-8 h-8" />
-                    <span className="text-sm">{label}</span>
+                    <Icon className="w-6 h-6" />
                 </button>
             ))}
         </div>

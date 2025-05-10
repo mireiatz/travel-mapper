@@ -17,13 +17,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from trips.views import TripViewSet, transport_types
+from rest_framework_nested.routers import NestedDefaultRouter
+from trips.views import TripViewSet, JourneyViewSet, transport_types
 
 router = DefaultRouter()
 router.register(r'trips', TripViewSet, basename='trip')
 
+# Nested router for journeys
+journey_router = NestedDefaultRouter(router, r'trips', lookup='trip')
+journey_router.register(r'journeys', JourneyViewSet, basename='trip-journeys')
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('api/', include(journey_router.urls)),
     path('api/transport-types/', transport_types, name='transport-types'),
 ]

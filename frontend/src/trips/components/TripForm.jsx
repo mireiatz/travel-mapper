@@ -2,7 +2,11 @@ import { useState, useEffect } from "react";
 import Input from "../../components/Input";
 
 function TripForm({ trip = {}, onChange }) {
-    const [formData, setFormData] = useState({ name: '', start_date: '', end_date: '' });
+    const [formData, setFormData] = useState({
+        name: '',
+        start_date: '',
+        end_date: ''
+    });
 
     // Populate form when editing
     useEffect(() => {

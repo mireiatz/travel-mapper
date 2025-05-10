@@ -41,6 +41,7 @@ function TripDetailsPage() {
             handleCloseModal();
         } catch (err) {
             console.error('Failed to save journey:', err);
+            throw err;
         }
     };
 
