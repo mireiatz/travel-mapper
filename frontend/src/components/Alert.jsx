@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Alert({ message, variant = 'error', onClose }) {
+function Alert({ message, variant = 'error' }) {
     const variantStyles = {
         error: 'bg-red-100 text-red-700 border-red-400',
         warning: 'bg-yellow-100 text-yellow-700 border-yellow-400',
@@ -13,14 +13,6 @@ function Alert({ message, variant = 'error', onClose }) {
     return (
         <div className={`border-l-4 p-4 mb-4 rounded ${variantStyles[variant]} relative`}>
             <span>{message}</span>
-            {onClose && (
-                <button
-                    onClick={onClose}
-                    className="absolute top-0 right-0 px-3 py-1 text-xl text-gray-500 hover:text-gray-700"
-                >
-                    &times;
-                </button>
-            )}
         </div>
     );
 }
