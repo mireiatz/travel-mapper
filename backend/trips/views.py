@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from rest_framework.decorators import action
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from . import models
@@ -9,6 +10,13 @@ from django.contrib.auth.models import User
 class TripViewSet(viewsets.ModelViewSet):
     queryset = Trip.objects.all().order_by('-created_at')
     serializer_class = TripSerializer
+
+    @action(detail=True, methods=['get'])
+    def journeys(self, request, pk=None):
+        trip = self.get_object()
+        journeys = Journey.objects.filter(trip=trip)
+        serializer = JourneySerializer(journeys, many=True)
+        return Response(serializer.data)
 
     def perform_create(self, serializer):
         # Use the first user as the default - remove when user logging is implemented
