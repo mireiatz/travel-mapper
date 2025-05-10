@@ -7,7 +7,10 @@ import {FaTrash} from "react-icons/fa";
 function TripItem({ trip, onEdit, onDelete }) {
     return (
         <li className="bg-white p-4 mb-2 rounded-lg shadow flex justify-between items-center">
-            <Link to={`/trips/${trip.id}`}>
+            <Link
+                to={`/trips/${trip.id}`}
+                state={{ trip }}
+            >
                 <h2 className="text-xl font-bold">{trip.name}</h2>
                 <p>{formatDateRange(trip.start_date, trip.end_date)}</p>
             </Link>

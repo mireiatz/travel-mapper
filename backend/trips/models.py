@@ -17,14 +17,13 @@ class Trip(models.Model):
 
 class Journey(models.Model):
     TRANSPORT_TYPES = [
-        ('car', 'Car'),
-        ('train', 'Train'),
-        ('plane', 'Plane'),
-        ('bus', 'Bus'),
-        ('bicycle', 'Bicycle'),
-        ('ferry', 'Ferry'),
         ('walk', 'Walk'),
-        ('other', 'Other'),
+        ('bicycle', 'Bicycle'),
+        ('car', 'Car'),
+        ('bus', 'Bus'),
+        ('train', 'Train'),
+        ('ferry', 'Ferry'),
+        ('plane', 'Plane'),
     ]
 
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name='journeys')

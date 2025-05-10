@@ -1,22 +1,22 @@
 import React from 'react';
-import TripItem from './TripItem.jsx';
+import JourneyItem from './JourneyItem';
 import Spinner from "../../components/Spinner.jsx";
 import Alert from "../../components/Alert.jsx";
 
-function TripList({ trips, loading, error, onEdit, onDelete }) {
+function JourneyList({ journeys, loading, error, onEdit, onDelete }) {
     if (loading) return <Spinner visible />;
     if (error) return <Alert message={error} />;
 
-    if (!trips || !trips.length) {
-        return <p>No trips found.</p>;
+    if (!journeys || !journeys.length) {
+        return <p>No journeys found.</p>;
     }
 
     return (
         <ul>
-            {trips.map((trip) => (
-                <TripItem
-                    key={trip.id}
-                    trip={trip}
+            {journeys.map(journey => (
+                <JourneyItem
+                    key={journey.id}
+                    journey={journey}
                     onEdit={onEdit}
                     onDelete={onDelete}
                 />
@@ -25,4 +25,4 @@ function TripList({ trips, loading, error, onEdit, onDelete }) {
     );
 }
 
-export default TripList;
+export default JourneyList;

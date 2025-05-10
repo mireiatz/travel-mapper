@@ -3,14 +3,14 @@ import { useTrips } from '../hooks/useTrips';
 import TripList from '../components/TripList';
 import ManageTripModal from '../modals/ManageTripModal';
 import Button from '../../components/Button';
-import Alert from '../../components/Alert';
-import Spinner from '../../components/Spinner';
 import {FaPlus} from "react-icons/fa";
+import {useModal} from "../../hooks/useModal.js";
 
 function TripsPage() {
-    const { items: trips, loadItems: loadTrips, createItem: createTrip, updateItem: updateTrip, deleteItem: deleteTrip, error, loading } = useTrips();
+
+    const { trips, loadTrips, createTrip, updateTrip, deleteTrip, tripLoading, tripError } = useTrips();
     const [editingTrip, setEditingTrip] = useState(null);
-    const [isModalOpen, setModalOpen] = useState(false);
+    const { isOpen, openModal, closeModal } = useModal();
 
     useEffect(() => {
         loadTrips();
@@ -18,12 +18,12 @@ function TripsPage() {
 
     const handleOpenModal = (trip = null) => {
         setEditingTrip(trip);
-        setModalOpen(true);
+        openModal();
     };
 
     const handleCloseModal = () => {
         setEditingTrip(null);
-        setModalOpen(false);
+        closeModal();
     };
 
     const handleSaveTrip = async (tripData) => {
@@ -47,22 +47,21 @@ function TripsPage() {
                 <Button label="Add" icon={FaPlus} onClick={() => handleOpenModal()} />
             </div>
 
-            <Spinner visible={loading} />
-            <Alert message={error} />
-
             <TripList
                 trips={trips}
                 onEdit={handleOpenModal}
                 onDelete={deleteTrip}
+                error={tripError}
+                loading={tripLoading}
             />
 
             <ManageTripModal
-                isOpen={isModalOpen}
+                isOpen={isOpen}
                 onClose={handleCloseModal}
                 onSave={handleSaveTrip}
                 editingTrip={editingTrip}
-                error={error}
-                loading={loading}
+                error={tripError}
+                loading={tripLoading}
             />
         </div>
     );

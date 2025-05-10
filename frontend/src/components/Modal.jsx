@@ -13,12 +13,13 @@ function Modal({
     onFooterButtonClick,
     error,
     loading,
+    maxWidth = 'max-w-md',
 }) {
     if (!isOpen) return null;
 
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-            <div className="bg-white rounded-lg overflow-hidden shadow-lg w-full max-w-md mx-4">
+            <div className={`bg-white rounded-lg overflow-hidden shadow-lg w-full ${maxWidth} mx-4`}>
                 <Spinner visible={loading} />
                 <header className="flex justify-between items-center p-4 border-b border-gray-200">
                     <h2 className="text-lg font-bold">{title}</h2>

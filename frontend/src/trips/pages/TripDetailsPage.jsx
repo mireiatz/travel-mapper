@@ -1,58 +1,100 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { fetchTripById } from '../../api/trips';
-import { formatDateRange } from '../../utils/date';
+import React, {useEffect, useState} from 'react';
+import Button from '../../components/Button';
+import JourneyList from '../../journeys/components/JourneyList.jsx';
+import ManageJourneyModal from '../../journeys/modals/ManageJourneyModal.jsx';
+import { useJourneys } from '../../journeys/hooks/useJourneys.js';
+import { useModal } from '../../hooks/useModal.js';
+import {Link, useLocation, useParams} from 'react-router-dom';
+import { formatDateRange } from '../../utils/date.js';
+import {FaPlus} from "react-icons/fa";
 
 function TripDetailsPage() {
+
     const { tripId } = useParams();
-    const [trip, setTrip] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
+    const location = useLocation();
+    const trip = location.state?.trip;
+    const { journeys, loadJourneys, createJourney, updateJourney, deleteJourney, journeyError, journeyLoading } = useJourneys(tripId);
+    const [editingJourney, setEditingJourney] = useState(null);
+    const { isOpen, openModal, closeModal } = useModal();
 
     useEffect(() => {
-        const loadTrip = async () => {
-            try {
-                const data = await fetchTripById(tripId);
-                setTrip(data);
-            } catch (err) {
-                setError('Failed to load trip details.');
-            } finally {
-                setLoading(false);
+        loadJourneys()
+    }, []);
+
+    const handleOpenModal = (journey = null) => {
+        setEditingJourney(journey);
+        openModal();
+    };
+
+    const handleCloseModal = () => {
+        setEditingJourney(null);
+        closeModal();
+    };
+
+    const handleSaveJourney = async (journeyData) => {
+        try {
+            if (journeyData.id) {
+                await updateJourney(journeyData.id, journeyData);
+            } else {
+                await createJourney(journeyData);
             }
-        };
+            handleCloseModal();
+        } catch (err) {
+            console.error('Failed to save journey:', err);
+        }
+    };
 
-        loadTrip();
-    }, [tripId]);
+    if(!trip) {
+        return (
+            <div className="flex justify-between items-center mb-4">
+                <p>No info found.</p>
+                <Link to="/trips" className="text-blue-600">Back</Link>
+            </div>
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p className="text-red-500">{error}</p>;
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gray-100 p-4">
-            <div className="flex justify-between items-center mb-4">
-                <h1 className="text-4xl font-bold text-blue-600">{trip.name}</h1>
-                <Link to="/trips" className="text-blue-600">Back</Link>
-            </div>
-            <p className="text-gray-700 mb-4">
-                {trip.start_date || trip.end_date ? formatDateRange(trip.start_date, trip.end_date) : 'No date specified'}
-            </p>
-            <hr className="mb-4" />
-            <div>
-                <h2 className="text-2xl font-bold mb-2">Journeys</h2>
-                {trip.journeys.length > 0 ? (
-                    <ul>
-                        {trip.journeys.map(journey => (
-                            <li key={journey.id} className="bg-white p-4 mb-2 rounded-lg shadow">
-                                <h3 className="text-lg font-bold">{journey.location}</h3>
-                                <p>{journey.date}</p>
-                                <p>{journey.transport}</p>
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>No journeys found.</p>
-                )}
-            </div>
+
+            {trip && (
+                <>
+
+                 <div className="flex justify-between items-center mb-4">
+                     <div>
+                         <h1 className="text-4xl font-bold text-blue-600">{trip.name}</h1>
+                         <p className="text-gray-700">{formatDateRange(trip.start_date, trip.end_date)}</p>
+                     </div>
+                     <Link to="/trips" className="text-blue-600">Back</Link>
+                 </div>
+
+                <hr className="mb-4" />
+
+                <div className="flex justify-between items-center mb-8">
+                    <h2 className="text-2xl font-bold">Journeys</h2>
+                    <Button label="Add" icon={FaPlus} onClick={openModal} />
+                </div>
+
+                <JourneyList
+                    journeys={journeys}
+                    onEdit={handleOpenModal}
+                    onDelete={deleteJourney}
+                    error={journeyError}
+                    loading={journeyLoading}
+                />
+
+                </>
+
+            )}
+
+            <ManageJourneyModal
+                isOpen={isOpen}
+                onClose={handleCloseModal}
+                onSave={handleSaveJourney}
+                editingJourney={editingJourney}
+                error={journeyError}
+                loading={journeyLoading}
+            />
         </div>
     );
 }
