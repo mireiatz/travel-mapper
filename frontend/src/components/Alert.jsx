@@ -1,6 +1,6 @@
 import React from 'react';
 
-function ValidationAlert({ message, variant = 'error', onClose }) {
+function Alert({ message, variant = 'error', onClose }) {
     const variantStyles = {
         error: 'bg-red-100 text-red-700 border-red-400',
         warning: 'bg-yellow-100 text-yellow-700 border-yellow-400',
@@ -25,4 +25,4 @@ function ValidationAlert({ message, variant = 'error', onClose }) {
     );
 }
 
-export default ValidationAlert;
+export default Alert;

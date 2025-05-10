@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from './Button';
-import ValidationAlert from './ValidationAlert';
+import Alert from './Alert.jsx';
 import Spinner from "./Spinner.jsx";
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
@@ -27,7 +27,7 @@ function Modal({
                     </button>
                 </header>
                 <div className="p-4">
-                    <ValidationAlert message={errorMessage} onClose={onClose} />
+                    <Alert message={errorMessage} onClose={onClose} />
                     {children}
                 </div>
                 <footer className="flex justify-end p-4 border-t border-gray-200">
