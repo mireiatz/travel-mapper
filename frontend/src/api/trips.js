@@ -1,7 +1,7 @@
 import { requestHandler } from './utils.js';
 
 export const fetchTrips = () => requestHandler('get', '/trips/');
-export const fetchTripById = (tripId) => requestHandler('get', `/trips/${tripId}/`);
-export const createTrip = (tripData) => requestHandler('post', '/trips/', tripData);
-export const updateTrip = (tripId, tripData) => requestHandler('put', `/trips/${tripId}/`, tripData);
-export const deleteTrip = (tripId) => requestHandler('delete', `/trips/${tripId}/`);
+export const fetchTripById = (id) => requestHandler('get', `/trips/${id}/`);
+export const createTrip = (data) => requestHandler('post', '/trips/', data);
+export const updateTrip = (id, data) => requestHandler('put', `/trips/${id}/`, data);
+export const deleteTrip = (id) => requestHandler('delete', `/trips/${id}/`);

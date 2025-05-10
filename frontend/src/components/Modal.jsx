@@ -2,7 +2,7 @@ import React from 'react';
 import Button from './Button';
 import Alert from './Alert.jsx';
 import Spinner from "./Spinner.jsx";
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import {FaX} from "react-icons/fa6";
 
 function Modal({
     isOpen,
@@ -23,7 +23,7 @@ function Modal({
                 <header className="flex justify-between items-center p-4 border-b border-gray-200">
                     <h2 className="text-lg font-bold">{title}</h2>
                     <button onClick={onClose} className="text-gray-500 hover:text-gray-800">
-                        <XMarkIcon className="w-6 h-6 text-gray-500 hover:text-gray-700 cursor-pointer" />
+                        <FaX className="w-6 h-6 text-gray-500 hover:text-gray-700 cursor-pointer" />
                     </button>
                 </header>
                 <div className="p-4">

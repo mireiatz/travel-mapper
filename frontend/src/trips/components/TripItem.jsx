@@ -1,7 +1,8 @@
 import React from 'react';
 import { formatDateRange } from '../../utils/date';
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline/index.js";
 import {Link} from "react-router-dom";
+import {FaPencil} from "react-icons/fa6";
+import {FaTrash} from "react-icons/fa";
 
 function TripItem({ trip, onEdit, onDelete }) {
     return (
@@ -12,10 +13,10 @@ function TripItem({ trip, onEdit, onDelete }) {
             </Link>
             <div className="flex space-x-2">
                 <button onClick={() => onEdit(trip)} className="text-blue-500 hover:text-blue-700">
-                    <PencilIcon className="w-5 h-5" />
+                    <FaPencil className="w-5 h-5" />
                 </button>
                 <button onClick={() => onDelete(trip.id)} className="text-red-500 hover:text-red-700">
-                    <TrashIcon className="w-5 h-5" />
+                    <FaTrash className="w-5 h-5" />
                 </button>
             </div>
         </li>
