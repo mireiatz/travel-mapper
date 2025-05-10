@@ -27,7 +27,12 @@ function ManageTripModal({ isOpen, onClose, onSave, editingTrip, loading, error 
             return;
         }
 
-        await onSave({ name: trip.name, start_date: trip.start_date || null, end_date: trip.end_date || null });
+        await onSave({
+            id: trip.id || null,
+            name: trip.name,
+            start_date: trip.start_date || null,
+            end_date: trip.end_date || null
+        });
         onClose();
     };
 
