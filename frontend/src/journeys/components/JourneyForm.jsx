@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Input from '../../components/Input';
 import TransportSelector from '../components/TransportSelector';
+import LocationInput from "../../components/LocationInput.jsx";
 
 function JourneyForm({ journey = {}, onChange }) {
     const [formData, setFormData] = useState({
-        from_location: '',
-        to_location: '',
+        from_location: journey?.from_location || { name: '', lat: null, lng: null },
+        to_location: journey?.to_location || { name: '', lat: null, lng: null },
         transport_type: '',
         start_date: '',
         end_date: '',
@@ -14,11 +15,11 @@ function JourneyForm({ journey = {}, onChange }) {
     useEffect(() => {
         if (journey) {
             setFormData({
-                from_location: journey.from_location || '',
-                to_location: journey.to_location || '',
-                transport_type: journey.transport_type || '',
-                start_date: journey.start_date || '',
-                end_date: journey.end_date || '',
+                from_location: journey?.from_location || { name: '', lat: null, lng: null },
+                to_location: journey?.to_location || { name: '', lat: null, lng: null },
+                transport_type: journey?.transport_type || '',
+                start_date: journey?.start_date || '',
+                end_date: journey?.end_date || '',
             });
         }
     }, [journey]);
@@ -30,20 +31,26 @@ function JourneyForm({ journey = {}, onChange }) {
     };
 
     return (
-        <div className="w-full">
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Input
-                    label="From"
-                    value={formData.from_location}
-                    onChange={(e) => handleChange('from_location', e.target.value)}
+        <div className="w-full space-y-4">
+            <div className="flex justify-center">
+                <TransportSelector
+                    value={formData.transport_type}
+                    onChange={(value) => handleChange('transport_type', value)}
+                    className="w-full max-w-2xl"
                     required
                 />
-                <Input
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <LocationInput
+                    label="From"
+                    value={formData.from_location}
+                    onChange={(value) => handleChange("from_location", value)}
+                />
+                <LocationInput
                     label="To"
                     value={formData.to_location}
-                    onChange={(e) => handleChange('to_location', e.target.value)}
-                    required
+                    onChange={(value) => handleChange("to_location", value)}
                 />
             </div>
 
@@ -59,15 +66,6 @@ function JourneyForm({ journey = {}, onChange }) {
                     type="date"
                     value={formData.end_date}
                     onChange={(e) => handleChange('end_date', e.target.value)}
-                />
-            </div>
-
-            <div className="flex justify-center">
-                <TransportSelector
-                    value={formData.transport_type}
-                    onChange={(value) => handleChange('transport_type', value)}
-                    className="w-full max-w-2xl"
-                    required
                 />
             </div>
         </div>

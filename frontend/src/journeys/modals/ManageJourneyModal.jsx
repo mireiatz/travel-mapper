@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Modal from '../../components/Modal.jsx';
 import JourneyForm from '../components/JourneyForm.jsx';
+import {GoogleMapsProvider} from "../../context/GoogleMapsContext.jsx";
 
 function ManageJourneyModal({ isOpen, onClose, onSave, editingJourney, loading, error }) {
     const [journey, setJourney] = useState({
@@ -14,11 +15,15 @@ function ManageJourneyModal({ isOpen, onClose, onSave, editingJourney, loading, 
 
     useEffect(() => {
         if (editingJourney) {
-            setJourney(editingJourney);
+            setJourney({
+                ...editingJourney,
+                from_location: editingJourney.from_location || { name: '', lat: null, lng: null },
+                to_location: editingJourney.to_location || { name: '', lat: null, lng: null },
+            });
         } else {
             setJourney({
-                from_location: '',
-                to_location: '',
+                from_location: { name: '', lat: null, lng: null },
+                to_location: { name: '', lat: null, lng: null },
                 transport_type: '',
                 start_date: '',
                 end_date: ''
@@ -34,7 +39,7 @@ function ManageJourneyModal({ isOpen, onClose, onSave, editingJourney, loading, 
     const handleSave = async () => {
         setValidationError('');
 
-        if (!journey.from_location || !journey.to_location) {
+        if (!journey.from_location.name || !journey.to_location.name) {
             setValidationError('Both "From" and "To" locations are required');
             return;
         }
@@ -66,10 +71,13 @@ function ManageJourneyModal({ isOpen, onClose, onSave, editingJourney, loading, 
             error={validationError || error}
             maxWidth="max-w-xl"
         >
-            <JourneyForm
-                journey={editingJourney}
-                onChange={setJourney}
-            />
+            <GoogleMapsProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
+                <JourneyForm
+                    journey={editingJourney}
+                    onChange={setJourney}
+                />
+            </GoogleMapsProvider>
+
         </Modal>
     );
 }
