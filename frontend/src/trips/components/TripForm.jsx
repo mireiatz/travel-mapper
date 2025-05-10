@@ -2,52 +2,45 @@ import { useState, useEffect } from "react";
 import Input from "../../components/Input";
 
 function TripForm({ trip = {}, onChange }) {
-    const [tripName, setTripName] = useState('');
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
+    const [formData, setFormData] = useState({ name: '', start_date: '', end_date: '' });
 
-    // Populate the form if editing
+    // Populate form when editing
     useEffect(() => {
         if (trip) {
-            setTripName(trip.name || '');
-            setStartDate(trip.start_date || '');
-            setEndDate(trip.end_date || '');
-        } else {
-            setTripName('');
-            setStartDate('');
-            setEndDate('');
+            setFormData({
+                id: trip.id,
+                name: trip.name || '',
+                start_date: trip.start_date || '',
+                end_date: trip.end_date || '',
+            });
         }
     }, [trip]);
 
-    // Pass up form state to the parent
-    useEffect(() => {
-        onChange({
-            id: trip?.id,
-            name: tripName,
-            start_date: startDate || null,
-            end_date: endDate || null,
-        });
-    }, [tripName, startDate, endDate]);
+    const handleChange = (field, value) => {
+        const updatedData = { ...formData, [field]: value };
+        setFormData(updatedData);
+        onChange(updatedData);
+    };
 
     return (
         <div className="space-y-4">
             <Input
                 label="Trip Name"
-                value={tripName}
-                onChange={(e) => setTripName(e.target.value)}
+                value={formData.name}
+                onChange={(e) => handleChange('name', e.target.value)}
                 required
             />
             <Input
                 label="Start Date"
                 type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
+                value={formData.start_date}
+                onChange={(e) => handleChange('start_date', e.target.value)}
             />
             <Input
                 label="End Date"
                 type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
+                value={formData.end_date}
+                onChange={(e) => handleChange('end_date', e.target.value)}
             />
         </div>
     );

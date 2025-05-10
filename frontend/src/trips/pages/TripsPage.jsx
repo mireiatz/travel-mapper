@@ -1,16 +1,30 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
+import { useTrips } from '../hooks/useTrips';
 import TripList from '../components/TripList';
-import ManageTripModal from '../modals/ManageTripModal.jsx';
+import ManageTripModal from '../modals/ManageTripModal';
 import Button from '../../components/Button';
-import ValidationAlert from '../../components/ValidationAlert';
+import Alert from '../../components/Alert';
 import Spinner from '../../components/Spinner';
-import { useTrips } from '../hooks/useTrips.js';
-import { useModal } from '../../hooks/useModal.js';
 import { PlusIcon } from '@heroicons/react/24/outline';
 
 function TripsPage() {
-    const { trips, addTrip, editTrip, removeTrip, error, loading, clearError } = useTrips();
-    const { isOpen, item: editingTrip, openModal, closeModal } = useModal();
+    const { trips, loadTrips, addTrip, editTrip, removeTrip, error, loading } = useTrips();
+    const [editingTrip, setEditingTrip] = useState(null);
+    const [isModalOpen, setModalOpen] = useState(false);
+
+    useEffect(() => {
+        loadTrips();
+    }, []);
+
+    const handleOpenModal = (trip = null) => {
+        setEditingTrip(trip);
+        setModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setEditingTrip(null);
+        setModalOpen(false);
+    };
 
     const handleSaveTrip = async (tripData) => {
         try {
@@ -19,9 +33,10 @@ function TripsPage() {
             } else {
                 await addTrip(tripData);
             }
-            closeModal();
+            handleCloseModal();
         } catch (err) {
             console.error('Failed to save trip:', err);
+            throw err;
         }
     };
 
@@ -29,23 +44,25 @@ function TripsPage() {
         <div className="min-h-screen bg-gray-100 p-4">
             <div className="flex justify-between items-center mb-8">
                 <h1 className="text-4xl font-bold text-blue-600">Trips</h1>
-                <Button label="Add" icon={PlusIcon} onClick={openModal} />
+                <Button label="Add" icon={PlusIcon} onClick={() => handleOpenModal()} />
             </div>
 
             <Spinner visible={loading} />
-            <ValidationAlert message={error} onClose={clearError} />
+            <Alert message={error} />
 
             <TripList
                 trips={trips}
-                onEdit={openModal}
+                onEdit={handleOpenModal}
                 onDelete={removeTrip}
             />
 
             <ManageTripModal
-                isOpen={isOpen}
-                onClose={closeModal}
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
                 onSave={handleSaveTrip}
                 editingTrip={editingTrip}
+                error={error}
+                loading={loading}
             />
         </div>
     );

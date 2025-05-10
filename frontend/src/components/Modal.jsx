@@ -11,8 +11,8 @@ function Modal({
     onClose,
     footerButtonText = 'OK',
     onFooterButtonClick,
-    errorMessage,
-    loading = false,
+    error,
+    loading,
 }) {
     if (!isOpen) return null;
 
@@ -27,7 +27,7 @@ function Modal({
                     </button>
                 </header>
                 <div className="p-4">
-                    <Alert message={errorMessage} onClose={onClose} />
+                    <Alert message={error} />
                     {children}
                 </div>
                 <footer className="flex justify-end p-4 border-t border-gray-200">

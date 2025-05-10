@@ -2,35 +2,34 @@ import Modal from "../../components/Modal.jsx";
 import TripForm from "../components/TripForm.jsx";
 import { useState, useEffect } from "react";
 
-function ManageTripModal({ isOpen, onClose, onSave, editingTrip }) {
-    const [formData, setFormData] = useState({});
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
+function ManageTripModal({ isOpen, onClose, onSave, editingTrip, loading, error }) {
+    const [trip, setTrip] = useState({ name: '', start_date: null, end_date: null });
+    const [validationError, setValidationError] = useState('');
+
+    useEffect(() => {
+        if (editingTrip) {
+            setTrip(editingTrip);
+        } else {
+            setTrip({ name: '', start_date: null, end_date: null });
+        }
+
+        if (isOpen) {
+            setValidationError('');
+        }
+    }, [isOpen, editingTrip]);
+
 
     const handleSave = async () => {
-        if (!formData.name || formData.name.trim() === '') {
-            setError('Trip name is required');
+        setValidationError('');
+
+        if (!trip.name.trim()) {
+            setValidationError('Trip name is required');
             return;
         }
 
-        setLoading(true);
-        try {
-            await onSave(formData);
-            onClose();
-        } catch (err) {
-            setError('Failed to save trip.');
-        } finally {
-            setLoading(false);
-        }
+        await onSave({ name: trip.name, start_date: trip.start_date || null, end_date: trip.end_date || null });
+        onClose();
     };
-
-    // Reset form data when modal is closed
-    useEffect(() => {
-        if (!isOpen) {
-            setFormData({});
-            setError('');
-        }
-    }, [isOpen]);
 
     return (
         <Modal
@@ -38,13 +37,13 @@ function ManageTripModal({ isOpen, onClose, onSave, editingTrip }) {
             title={editingTrip ? "Update Trip" : "Create Trip"}
             onClose={onClose}
             onFooterButtonClick={handleSave}
-            footerButtonText={loading ? "Saving..." : editingTrip ? "Update" : "Create"}
+            footerButtonText={editingTrip ? "Update" : "Create"}
             loading={loading}
-            errorMessage={error}
+            error={validationError || error}
         >
             <TripForm
-                trip={editingTrip}
-                onChange={(data) => setFormData(data)}
+                trip={trip}
+                onChange={setTrip}
             />
         </Modal>
     );
