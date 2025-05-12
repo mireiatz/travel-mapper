@@ -71,13 +71,10 @@ function ManageJourneyModal({ isOpen, onClose, onSave, editingJourney, loading, 
             error={validationError || error}
             maxWidth="max-w-xl"
         >
-            <GoogleMapsProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
-                <JourneyForm
-                    journey={editingJourney}
-                    onChange={setJourney}
-                />
-            </GoogleMapsProvider>
-
+            <JourneyForm
+                journey={editingJourney}
+                onChange={setJourney}
+            />
         </Modal>
     );
 }
