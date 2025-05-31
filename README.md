@@ -1,6 +1,6 @@
 # Travel Mapper
 
-Travel Mapper is a full-stack application for tracking trips, built to visualise journeys on a map. The project is built to practice Django + React integration.
+Travel Mapper is a full-stack application for tracking trips. The project is built to practice Django + React integration.
 
 ## Features
 - Create, update, and delete trips and journeys
