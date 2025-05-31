@@ -47,4 +47,4 @@ class Journey(models.Model):
         ordering = ['order', 'start_date', 'created_at']
 
     def __str__(self):
-        return f"{self.from_location} → {self.to_location}"
+        return f"{self.from_location_name} → {self.to_location_name}"

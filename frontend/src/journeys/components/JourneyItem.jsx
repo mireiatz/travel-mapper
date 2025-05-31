@@ -12,7 +12,7 @@ function JourneyItem({ journey, onEdit, onDelete }) {
             <div>
                 <div className="flex">
                     <TransportIcon className="w-6 h-6 mr-2 text-gray-500" />
-                    <h3 className="text-lg font-bold">{journey.from_location} ➔ {journey.to_location}</h3>
+                    <h3 className="text-lg font-bold">{journey.from_location.name} ➔ {journey.to_location.name}</h3>
                  </div>
                 <p>{formatDateRange(journey.start_date, journey.end_date)}</p>
             </div>

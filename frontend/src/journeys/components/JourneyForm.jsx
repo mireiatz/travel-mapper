@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Input from '../../components/Input';
 import TransportSelector from '../components/TransportSelector';
 import LocationInput from "../../components/LocationInput.jsx";
@@ -7,27 +7,33 @@ function JourneyForm({ journey = {}, onChange }) {
     const [formData, setFormData] = useState({
         from_location: journey?.from_location || { name: '', lat: null, lng: null },
         to_location: journey?.to_location || { name: '', lat: null, lng: null },
-        transport_type: '',
-        start_date: '',
-        end_date: '',
+        transport_type: journey?.transport_type || '',
+        start_date: journey?.start_date || '',
+        end_date: journey?.end_date || '',
     });
 
     useEffect(() => {
         if (journey) {
             setFormData({
-                from_location: journey?.from_location || { name: '', lat: null, lng: null },
-                to_location: journey?.to_location || { name: '', lat: null, lng: null },
-                transport_type: journey?.transport_type || '',
-                start_date: journey?.start_date || '',
-                end_date: journey?.end_date || '',
+                id: journey?.id,
+                from_location: journey?.from_location,
+                to_location: journey?.to_location,
+                transport_type: journey?.transport_type,
+                start_date: journey?.start_date,
+                end_date: journey?.end_date,
             });
         }
     }, [journey]);
 
+    useEffect(() => {
+        onChange(formData);
+    }, [formData, onChange]);
+
     const handleChange = (field, value) => {
-        const updatedData = { ...formData, [field]: value };
-        setFormData(updatedData);
-        onChange(updatedData);
+        setFormData(prev => ({
+            ...prev,
+            [field]: value,
+        }));
     };
 
     return (
@@ -44,12 +50,12 @@ function JourneyForm({ journey = {}, onChange }) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <LocationInput
                     label="From"
-                    value={formData.from_location}
+                    value={formData.from_location || { name: '', lat: null, lng: null }}
                     onChange={(value) => handleChange("from_location", value)}
                 />
                 <LocationInput
                     label="To"
-                    value={formData.to_location}
+                    value={formData.to_location || { name: '', lat: null, lng: null }}
                     onChange={(value) => handleChange("to_location", value)}
                 />
             </div>

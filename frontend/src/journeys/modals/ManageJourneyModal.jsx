@@ -54,8 +54,8 @@ function ManageJourneyModal({ isOpen, onClose, onSave, editingJourney, loading, 
             from_location: journey.from_location,
             to_location: journey.to_location,
             transport_type: journey.transport_type,
-            start_date: journey.start_date || null,
-            end_date: journey.end_date || null
+            start_date: journey.start_date,
+            end_date: journey.end_date,
         });
         onClose();
     };
